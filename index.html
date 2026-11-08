@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nigeria's Changing Climate — AI-Based Detection & Forecast</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">AI in Weather Prediction — Case Study</p>
+    <h1>Nigeria's Changing Climate</h1>
+    <p class="subtitle">46 years of real satellite &amp; reanalysis data (1980&ndash;2025), analyzed with statistical trend detection and machine learning to see how temperature and rainfall are actually changing &mdash; and what it means for the people living through it.</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- ZONE MAP / SELECTOR -->
+  <section class="section">
+    <h2>Choose a Region</h2>
+    <p class="section-intro">Nigeria's climate varies dramatically from the humid south to the dry north. Select a zone to explore its data.</p>
+    <div class="zone-grid" id="zoneGrid">
+      <button class="zone-card" data-zone="nigeria">
+        <span class="zone-name">Nigeria</span>
+        <span class="zone-sub">Whole country</span>
+      </button>
+      <button class="zone-card" data-zone="Tropical_Monsoon">
+        <span class="zone-name">Tropical Monsoon</span>
+        <span class="zone-sub">Deep south / Niger Delta</span>
+      </button>
+      <button class="zone-card" data-zone="Tropical_Savannah">
+        <span class="zone-name">Tropical Savannah</span>
+        <span class="zone-sub">Middle Belt</span>
+      </button>
+      <button class="zone-card" data-zone="Tropical_Dry_Sahel">
+        <span class="zone-name">Tropical Dry / Sahel</span>
+        <span class="zone-sub">Far north</span>
+      </button>
+      <button class="zone-card" data-zone="Montane">
+        <span class="zone-name">Montane</span>
+        <span class="zone-sub">Jos Plateau highlands</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- VARIABLE TOGGLE + CHART -->
+  <section class="section">
+    <div class="chart-header">
+      <h2 id="chartTitle">Temperature Trend &mdash; Nigeria</h2>
+      <div class="toggle-group" id="varToggle">
+        <button class="toggle-btn active" data-var="temp">Temperature</button>
+        <button class="toggle-btn" data-var="rain">Rainfall</button>
+      </div>
+    </div>
+    <p class="section-intro">Solid line: real observed data, 1980&ndash;2025. Dashed line: projected continuation of the statistically detected trend, 2026&ndash;2035.</p>
+    <div class="chart-wrap">
+      <canvas id="mainChart"></canvas>
+    </div>
+    <div class="trend-badge" id="trendBadge"></div>
+  </section>
+
+  <!-- HUMAN IMPACT -->
+  <section class="section impact-section">
+    <h2>What This Means for People</h2>
+    <div class="impact-box" id="impactBox"></div>
+  </section>
+
+  <!-- KEY STATS -->
+  <section class="section">
+    <h2>Key Findings</h2>
+    <div class="stats-grid" id="statsGrid"></div>
+  </section>
+
+  <!-- EXTREME EVENTS -->
+  <section class="section">
+    <h2>Extreme Weather Is Becoming More Frequent</h2>
+    <p class="section-intro">Beyond rising averages, the number of extreme hot days and heavy-rainfall days each year is also trending up.</p>
+    <div class="chart-wrap small">
+      <canvas id="extremeChart"></canvas>
+    </div>
+  </section>
+
+  <!-- VALIDATION -->
+  <section class="section">
+    <h2>Proof: Predicting the Future, Then Checking Against Reality</h2>
+    <p class="section-intro">Every model here was trained only on data through 31 December 2025. We then forecast the first week of January 2026 &mdash; and compared it against what actually happened, using real observed data collected afterward.</p>
+    <div class="chart-wrap small">
+      <canvas id="validationChart"></canvas>
+    </div>
+    <div class="rmse-table" id="rmseTable"></div>
+  </section>
+
+  <!-- METHODOLOGY -->
+  <section class="section methodology">
+    <h2>About This Analysis</h2>
+    <p>Data: ERA5 Reanalysis, Copernicus Climate Data Store, 1980&ndash;2025 (46 years), daily temperature and rainfall at ~28km resolution. Trend detection: Mann-Kendall test with Sen's slope estimator, cross-checked with BEAST Bayesian changepoint analysis. Prediction: LSTM neural network and Random Forest, compared against a naive baseline. Explainability: SHAP values used to identify what actually drives extreme-event predictions.</p>
+    <p class="disclaimer">This is a research project, not an official weather or climate forecasting service. Projections shown are statistical trend continuations, not day-by-day weather forecasts.</p>
+  </section>
+
+</main>
+
+<footer>
+  <p>AI in Weather Prediction — Nigeria Climate Change Case Study</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
