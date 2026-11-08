@@ -4,123 +4,141 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nigeria's Changing Climate — AI-Based Detection & Forecast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="hero">
-  <div class="hero-inner">
-    <p class="eyebrow">AI in Weather Prediction — Case Study</p>
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="kicker">Nigeria &middot; 1980&ndash;2025 &middot; ERA5 reanalysis</p>
     <h1>Nigeria's Changing Climate</h1>
-    <p class="subtitle">46 years of real satellite &amp; reanalysis data (1980&ndash;2025), analyzed with statistical trend detection and machine learning to see how temperature and rainfall are actually changing &mdash; and what it means for the people living through it.</p>
+    <p class="dek">Forty-six years of daily temperature and rainfall data, examined for statistically real trends and used to train models that forecast what comes next.</p>
   </div>
 </header>
 
 <main>
 
-  <!-- ZONE MAP / SELECTOR -->
-  <section class="section">
-    <h2>Choose a Region</h2>
-    <p class="section-intro">Nigeria's climate varies dramatically from the humid south to the dry north. Select a zone to explore its data.</p>
-    <div class="zone-grid" id="zoneGrid">
-      <button class="zone-card" data-zone="nigeria">
-        <span class="zone-name">Nigeria</span>
-        <span class="zone-sub">Whole country</span>
-      </button>
-      <button class="zone-card" data-zone="Tropical_Monsoon">
-        <span class="zone-name">Tropical Monsoon</span>
-        <span class="zone-sub">Deep south / Niger Delta</span>
-      </button>
-      <button class="zone-card" data-zone="Tropical_Savannah">
-        <span class="zone-name">Tropical Savannah</span>
-        <span class="zone-sub">Middle Belt</span>
-      </button>
-      <button class="zone-card" data-zone="Tropical_Dry_Sahel">
-        <span class="zone-name">Tropical Dry / Sahel</span>
-        <span class="zone-sub">Far north</span>
-      </button>
-      <button class="zone-card" data-zone="Montane">
-        <span class="zone-name">Montane</span>
-        <span class="zone-sub">Jos Plateau highlands</span>
-      </button>
-    </div>
-  </section>
+  <!-- ZONE SELECTOR -->
+  <nav class="zone-nav" id="zoneGrid" aria-label="Select region">
+    <button class="zone-tab active" data-zone="nigeria">Nigeria</button>
+    <button class="zone-tab" data-zone="Tropical_Monsoon">Monsoon</button>
+    <button class="zone-tab" data-zone="Tropical_Savannah">Savannah</button>
+    <button class="zone-tab" data-zone="Tropical_Dry_Sahel">Sahel</button>
+    <button class="zone-tab" data-zone="Montane">Montane</button>
+  </nav>
 
-  <!-- REAL LSTM PREDICTION -->
-  <section class="section">
-    <div class="lstm-label">
-      <span class="lstm-badge">LIVE MODEL OUTPUT</span>
-      <h2>Run a Prediction &mdash; Your Trained LSTM, Forecasting Forward</h2>
-    </div>
-    <p class="section-intro" id="lstmIntro"></p>
-    <div class="toggle-group" id="lstmVarToggle">
-      <button class="toggle-btn active" data-var="temp">Temperature</button>
-      <button class="toggle-btn" data-var="rain">Rainfall</button>
-    </div>
-    <div class="chart-wrap small">
-      <canvas id="lstmChart"></canvas>
-    </div>
-    <div class="lstm-note" id="lstmNote"></div>
-  </section>
-
-  <!-- VARIABLE TOGGLE + CHART -->
-  <section class="section">
-    <div class="chart-header">
-      <h2 id="chartTitle">Historical Trend &amp; Long-Range Outlook &mdash; Nigeria</h2>
-      <div class="toggle-group" id="varToggle">
-        <button class="toggle-btn active" data-var="temp">Temperature</button>
-        <button class="toggle-btn" data-var="rain">Rainfall</button>
+  <!-- LSTM PREDICTION -->
+  <section class="block">
+    <div class="block-head">
+      <span class="block-no">01</span>
+      <div>
+        <h2>The forecast</h2>
+        <p class="block-dek">A trained LSTM network predicting thirty days forward from the last day of observed data, one day at a time.</p>
       </div>
     </div>
-    <p class="section-intro">Solid line: real observed data, 1980&ndash;2025. Dashed line: projected continuation of the statistically detected trend, 2026&ndash;2035.</p>
-    <div class="chart-wrap">
+
+    <p class="running-text" id="lstmIntro"></p>
+
+    <div class="pill-toggle" id="lstmVarToggle">
+      <button class="pill active" data-var="temp">Temperature</button>
+      <button class="pill" data-var="rain">Rainfall</button>
+    </div>
+
+    <div class="chart-frame">
+      <canvas id="lstmChart"></canvas>
+    </div>
+
+    <p class="footnote" id="lstmNote"></p>
+  </section>
+
+  <!-- HISTORICAL TREND -->
+  <section class="block">
+    <div class="block-head">
+      <span class="block-no">02</span>
+      <div>
+        <h2 id="chartTitle">Historical trend</h2>
+        <p class="block-dek">Solid line is observed history. Dashed line continues the statistically measured trend to 2035 — not a model forecast, a straight-edge projection of the detected rate of change.</p>
+      </div>
+    </div>
+
+    <div class="pill-toggle" id="varToggle">
+      <button class="pill active" data-var="temp">Temperature</button>
+      <button class="pill" data-var="rain">Rainfall</button>
+    </div>
+
+    <div class="chart-frame">
       <canvas id="mainChart"></canvas>
     </div>
-    <div class="trend-badge" id="trendBadge"></div>
+
+    <p class="footnote" id="trendBadge"></p>
   </section>
 
   <!-- HUMAN IMPACT -->
-  <section class="section impact-section">
-    <h2>What This Means for People</h2>
-    <div class="impact-box" id="impactBox"></div>
+  <section class="block block-impact">
+    <div class="block-head">
+      <span class="block-no">03</span>
+      <div>
+        <h2>What it means on the ground</h2>
+      </div>
+    </div>
+    <div id="impactBox"></div>
   </section>
 
-  <!-- KEY STATS -->
-  <section class="section">
-    <h2>Key Findings</h2>
-    <div class="stats-grid" id="statsGrid"></div>
+  <!-- KEY FINDINGS -->
+  <section class="block">
+    <div class="block-head">
+      <span class="block-no">04</span>
+      <div><h2>In numbers</h2></div>
+    </div>
+    <dl class="fact-list" id="statsGrid"></dl>
   </section>
 
   <!-- EXTREME EVENTS -->
-  <section class="section">
-    <h2>Extreme Weather Is Becoming More Frequent</h2>
-    <p class="section-intro">Beyond rising averages, the number of extreme hot days and heavy-rainfall days each year is also trending up.</p>
-    <div class="chart-wrap small">
+  <section class="block">
+    <div class="block-head">
+      <span class="block-no">05</span>
+      <div>
+        <h2>Extremes, not just averages</h2>
+        <p class="block-dek">The count of unusually hot days and unusually heavy rainfall days, each year, by zone.</p>
+      </div>
+    </div>
+    <div class="chart-frame short">
       <canvas id="extremeChart"></canvas>
     </div>
   </section>
 
   <!-- VALIDATION -->
-  <section class="section">
-    <h2>Proof: Predicting the Future, Then Checking Against Reality</h2>
-    <p class="section-intro">Every model here was trained only on data through 31 December 2025. We then forecast the first week of January 2026 &mdash; and compared it against what actually happened, using real observed data collected afterward.</p>
-    <div class="chart-wrap small">
+  <section class="block">
+    <div class="block-head">
+      <span class="block-no">06</span>
+      <div>
+        <h2>Checking the work</h2>
+        <p class="block-dek">Every model below was trained only on data through 31 December 2025, then asked to forecast the first week of January 2026 — before that week's real data existed anywhere these models could see it.</p>
+      </div>
+    </div>
+    <div class="chart-frame short">
       <canvas id="validationChart"></canvas>
     </div>
-    <div class="rmse-table" id="rmseTable"></div>
+    <div class="rmse-row" id="rmseTable"></div>
   </section>
 
   <!-- METHODOLOGY -->
-  <section class="section methodology">
-    <h2>About This Analysis</h2>
-    <p>Data: ERA5 Reanalysis, Copernicus Climate Data Store, 1980&ndash;2025 (46 years), daily temperature and rainfall at ~28km resolution. Trend detection: Mann-Kendall test with Sen's slope estimator, cross-checked with BEAST Bayesian changepoint analysis. Prediction: LSTM neural network and Random Forest, compared against a naive baseline. Explainability: SHAP values used to identify what actually drives extreme-event predictions.</p>
-    <p class="disclaimer">This is a research project, not an official weather or climate forecasting service. Projections shown are statistical trend continuations, not day-by-day weather forecasts.</p>
+  <section class="block block-method">
+    <div class="block-head">
+      <span class="block-no">07</span>
+      <div><h2>Method</h2></div>
+    </div>
+    <p class="running-text">Data is ERA5 reanalysis from the Copernicus Climate Data Store, 1980&ndash;2025, daily temperature and rainfall at roughly 28km resolution. Trend significance is tested with Mann-Kendall and Sen's slope, cross-checked against BEAST Bayesian changepoint detection. Forecasting uses an LSTM neural network and a Random Forest baseline. SHAP values identify which inputs actually drive extreme-event predictions.</p>
+    <p class="footnote">A research project, not an operational forecasting service. The 2026&ndash;2035 line is a trend projection, not a weather forecast.</p>
   </section>
 
 </main>
 
 <footer>
-  <p>AI in Weather Prediction — Nigeria Climate Change Case Study</p>
+  <p>AI in Weather Prediction — Nigeria case study</p>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
