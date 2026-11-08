@@ -1,32 +1,25 @@
-# Nigeria's Changing Climate
+# Nigeria Climate Forecast
 
-An interactive web dashboard presenting findings from a research project
-analyzing 46 years (1980–2025) of real ERA5 climate data for Nigeria, using
-statistical trend detection (Mann-Kendall, BEAST) and machine learning
-(LSTM, Random Forest) to detect and predict temperature and rainfall change
-across Nigeria's four climate zones.
+A minimal interactive forecast tool built on a research project analyzing
+46 years (1980–2025) of real ERA5 climate data for Nigeria.
 
-## Features
-
-- Interactive zone selector (Nigeria + 4 climate zones)
-- Real historical temperature/rainfall trends, 1980–2025
-- Trend-based projections to 2035
-- Plain-language explanations of human impact per zone
-- Extreme weather event trends (hot days, heavy rainfall days)
-- Real-world forecast validation: models trained only through 2025,
-  checked against actual observed January 2026 weather
+Select a zone (Nigeria, or one of its four climate regions) and a variable
+(temperature or rainfall) to see a real 14-day forecast from a trained LSTM
+neural network — not a statistical trend line, the model's actual output,
+generated recursively day by day from the end of the training data
+(2025-12-31).
 
 ## Tech
 
 Static site — plain HTML/CSS/JS, [Chart.js](https://www.chartjs.org/) for
-charts, no build step or backend required. All data in `data.json` was
-exported from the underlying Python research project (real ERA5 data +
-actual trained model results, not placeholder numbers).
+the chart, no build step or backend required. `zone_forecasts.json`
+contains the precomputed model output (5 zones × 14 days × 2 variables),
+generated from the underlying Python research project.
 
 ## Deploy
 
-This is a zero-config static site — deploy directly on [Vercel](https://vercel.com)
-by importing this repository.
+Zero-config static site — deploy on [Vercel](https://vercel.com) by
+importing this repository.
 
 ## Local development
 
