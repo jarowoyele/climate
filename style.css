@@ -146,6 +146,27 @@ h2 {
 .trend-badge.sig { background: #fdeee9; color: var(--red); }
 .trend-badge.not-sig { background: #eef2f6; color: var(--text-muted); }
 
+/* LSTM prediction section */
+.lstm-label { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+.lstm-badge {
+  background: var(--teal);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.lstm-note {
+  margin-top: 16px;
+  background: #fff8ec;
+  border: 1px solid #f0dca8;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  color: #7a5b1e;
+}
+
 /* Impact */
 .impact-section { background: #f0f5f9; margin: 0 -24px; padding: 48px 24px; border-radius: 0; }
 .impact-box {

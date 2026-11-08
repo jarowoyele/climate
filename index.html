@@ -46,10 +46,27 @@
     </div>
   </section>
 
+  <!-- REAL LSTM PREDICTION -->
+  <section class="section">
+    <div class="lstm-label">
+      <span class="lstm-badge">LIVE MODEL OUTPUT</span>
+      <h2>Run a Prediction &mdash; Your Trained LSTM, Forecasting Forward</h2>
+    </div>
+    <p class="section-intro" id="lstmIntro"></p>
+    <div class="toggle-group" id="lstmVarToggle">
+      <button class="toggle-btn active" data-var="temp">Temperature</button>
+      <button class="toggle-btn" data-var="rain">Rainfall</button>
+    </div>
+    <div class="chart-wrap small">
+      <canvas id="lstmChart"></canvas>
+    </div>
+    <div class="lstm-note" id="lstmNote"></div>
+  </section>
+
   <!-- VARIABLE TOGGLE + CHART -->
   <section class="section">
     <div class="chart-header">
-      <h2 id="chartTitle">Temperature Trend &mdash; Nigeria</h2>
+      <h2 id="chartTitle">Historical Trend &amp; Long-Range Outlook &mdash; Nigeria</h2>
       <div class="toggle-group" id="varToggle">
         <button class="toggle-btn active" data-var="temp">Temperature</button>
         <button class="toggle-btn" data-var="rain">Rainfall</button>
