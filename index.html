@@ -15,7 +15,7 @@
 
   <div class="app-top">
     <span class="app-name">Nigeria Climate Forecast</span>
-    <span class="app-tag">LSTM model &middot; trained on 1980&ndash;2025</span>
+    <span class="app-tag">ERA5 data, 1980&ndash;2025</span>
   </div>
 
   <div class="zone-select" id="zoneGrid">
@@ -27,19 +27,34 @@
   </div>
 
   <div class="card">
-    <div class="card-top">
+
+    <div class="controls-row">
       <div class="var-select" id="varToggle">
         <button class="var-btn active" data-var="temp">Temperature</button>
         <button class="var-btn" data-var="rain">Rainfall</button>
       </div>
-      <span class="asof" id="asOf"></span>
+      <input type="date" id="datePick" class="date-pick">
     </div>
 
-    <div class="chart-area">
-      <canvas id="forecastChart"></canvas>
+    <div class="result">
+      <div class="result-figure" id="figure">&ndash;</div>
+      <div class="result-meta">
+        <span class="result-label" id="resultLabel"></span>
+        <span class="method-tag" id="methodTag"></span>
+      </div>
     </div>
 
-    <p class="caption" id="caption"></p>
+    <p class="consequence" id="consequence"></p>
+
+    <div class="hourly-block" id="hourlyBlock">
+      <button class="hourly-toggle" id="hourlyToggle">Show hour-by-hour pattern &darr;</button>
+      <div class="chart-area" id="hourlyChartWrap" style="display:none">
+        <canvas id="hourlyChart"></canvas>
+        <p class="hourly-note">Modeled from this day's expected high/low using a typical diurnal cycle &mdash; not an hour-by-hour model prediction.</p>
+      </div>
+    </div>
+    <p class="hourly-note rain-note" id="rainHourlyNote" style="display:none">Hour-by-hour rainfall isn't shown: the dataset only has daily totals, and rainfall doesn't follow a predictable curve the way temperature does.</p>
+
   </div>
 
 </div>
