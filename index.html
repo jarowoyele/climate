@@ -53,7 +53,13 @@
         <p class="hourly-note">Modeled from this day's expected high/low using a typical diurnal cycle &mdash; not an hour-by-hour model prediction.</p>
       </div>
     </div>
-    <p class="hourly-note rain-note" id="rainHourlyNote" style="display:none">Hour-by-hour rainfall isn't shown: the dataset only has daily totals, and rainfall doesn't follow a predictable curve the way temperature does.</p>
+    <div class="hourly-block" id="rainBlock" style="display:none">
+      <button class="hourly-toggle" id="rainToggle">Show nearby days &darr;</button>
+      <div class="chart-area" id="rainChartWrap" style="display:none">
+        <canvas id="rainChart"></canvas>
+        <p class="hourly-note">Rainfall doesn't follow a predictable hour-by-hour curve the way temperature does, so this shows the days around your selected date instead &mdash; each bar is that day's expected total.</p>
+      </div>
+    </div>
 
   </div>
 

@@ -1,6 +1,7 @@
 let CLIM = null;
 let FORECASTS = null;
 let hourlyChart = null;
+let rainChart = null;
 
 let state = { zone: "nigeria", variable: "temp", date: null };
 
@@ -18,22 +19,44 @@ async function loadData() {
   FORECASTS = await r2.json();
 
   const dateInput = document.getElementById('datePick');
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const minDate = toISODate(tomorrow);
-  dateInput.min = minDate;
-  dateInput.value = minDate;
-  state.date = minDate;
 
-  const maxDate = new Date();
-  maxDate.setFullYear(maxDate.getFullYear() + 10);
-  dateInput.max = toISODate(maxDate);
+  // The valid range is anchored to the data, not to the machine's clock:
+  // predictions start the day after the training data ends (2025-12-31),
+  // so every day of the following years is selectable regardless of
+  // what "today" happens to be on the device running the app.
+  const dataEnd = FORECASTS['nigeria'].generated_from; // "2025-12-31"
+  const minDate = addDays(dataEnd, 1);
+  dateInput.min = minDate;
+
+  const maxD = new Date(dataEnd + "T00:00:00");
+  maxD.setFullYear(maxD.getFullYear() + 10);
+  const maxDate = toISODate(maxD);
+  dateInput.max = maxDate;
+
+  // Default to the real "today" when it falls inside that range (the
+  // common case), otherwise fall back to the first selectable date.
+  let defaultDate = toISODate(new Date());
+  if (defaultDate < minDate || defaultDate > maxDate) defaultDate = minDate;
+  dateInput.value = defaultDate;
+  state.date = defaultDate;
 
   render();
 }
 
 function toISODate(d) {
-  return d.toISOString().slice(0, 10);
+  // Use local date components, not toISOString() (which converts to UTC
+  // and can silently shift the date by a day depending on the viewer's
+  // timezone offset).
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function addDays(dateStr, n) {
+  const d = new Date(dateStr + "T00:00:00");
+  d.setDate(d.getDate() + n);
+  return toISODate(d);
 }
 
 function dayOfYear(d) {
@@ -138,14 +161,15 @@ function render() {
     consequenceText(zone, variable, result.value, result.method);
 
   const hourlyBlock = document.getElementById('hourlyBlock');
-  const rainNote = document.getElementById('rainHourlyNote');
+  const rainBlock = document.getElementById('rainBlock');
   if (variable === "temp") {
     hourlyBlock.style.display = "";
-    rainNote.style.display = "none";
+    rainBlock.style.display = "none";
     renderHourly();
   } else {
     hourlyBlock.style.display = "none";
-    rainNote.style.display = "";
+    rainBlock.style.display = "";
+    renderRainContext();
   }
 }
 
@@ -181,6 +205,50 @@ function renderHourly() {
   });
 }
 
+function renderRainContext() {
+  // Rainfall has no honest hour-by-hour curve, so instead of leaving the
+  // panel blank, show the real predicted/climatological totals for the
+  // days surrounding the selected date -- genuine data, just at daily
+  // rather than hourly resolution.
+  const offsets = [-3, -2, -1, 0, 1, 2, 3];
+  const t = CLIM[state.zone].thresholds;
+  const labels = [];
+  const values = [];
+
+  offsets.forEach((o) => {
+    const ds = addDays(state.date, o);
+    const d = new Date(ds + "T00:00:00");
+    labels.push(o === 0 ? "Selected" : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }));
+    values.push(predict(state.zone, "rain", ds).value);
+  });
+
+  const ctx = document.getElementById('rainChart').getContext('2d');
+  if (rainChart) rainChart.destroy();
+  rainChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: offsets.map(o => o === 0 ? "#2451c4" : "#2451c466"),
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { displayColors: false, callbacks: { label: (c) => `${c.parsed.y}mm` } }
+      },
+      scales: {
+        y: { grid: { color: '#eef1f6' }, ticks: { font: { size: 10 } }, suggestedMax: Math.max(t.heavy_rain_95 * 1.1, ...values, 1) },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+}
+
 document.getElementById('zoneGrid').addEventListener('click', (e) => {
   const btn = e.target.closest('.zone-btn');
   if (!btn) return;
@@ -211,6 +279,14 @@ document.getElementById('hourlyToggle').addEventListener('click', (e) => {
   wrap.style.display = showing ? "none" : "";
   e.target.textContent = showing ? "Show hour-by-hour pattern ↓" : "Hide hour-by-hour pattern ↑";
   if (!showing) renderHourly();
+});
+
+document.getElementById('rainToggle').addEventListener('click', (e) => {
+  const wrap = document.getElementById('rainChartWrap');
+  const showing = wrap.style.display !== "none";
+  wrap.style.display = showing ? "none" : "";
+  e.target.textContent = showing ? "Show nearby days ↓" : "Hide nearby days ↑";
+  if (!showing) renderRainContext();
 });
 
 loadData();
